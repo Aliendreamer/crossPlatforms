@@ -13,6 +13,6 @@
   <application android:label="TravelApp">
     <meta-data
 			android:name = "com.google.android.geo.API_KEY" 
-      android:value = "AIzaSyCM0jUZhDFVtphfJ8HU7NpWpHPECCNOsY0"/>
+      android:value = "x"/>
   </application>
 </manifest>
