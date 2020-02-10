@@ -1,11 +1,10 @@
-﻿using System;
-
-using Android.App;
+﻿using Android.App;
 using Android.Content.PM;
 using Android.Runtime;
 
 using Android.OS;
 using System.IO;
+using Plugin.Permissions;
 
 namespace TravelRecordApp.Droid
 {
@@ -27,12 +26,11 @@ namespace TravelRecordApp.Droid
             string fullPath = Path.Combine(folderPath, dbName);
 
             LoadApplication(new App(fullPath));
-            LoadApplication(new App());
+      
         }
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {
-            Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-
+            PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
