@@ -27,9 +27,7 @@ namespace TravelRecordApp
 
         void Handle_ItemSelected(object sender,SelectedItemChangedEventArgs e)
         {
-            var selectedPost = postListView.SelectedItem as Post;
-
-            if (selectedPost != null)
+            if (postListView.SelectedItem is Post selectedPost)
             {
                 Navigation.PushAsync(new PostDetailPage(selectedPost));
             }
