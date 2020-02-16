@@ -3,6 +3,7 @@ using Plugin.Geolocator;
 using Plugin.Geolocator.Abstractions;
 using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
+using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -57,9 +58,9 @@ namespace TravelRecordApp
             }
         }
 
-        protected override void OnDisappearing()
+        protected override async void OnDisappearing()
         {
-            CrossGeolocator.Current.StopListeningAsync();
+            await CrossGeolocator.Current.StopListeningAsync();
             CrossGeolocator.Current.PositionChanged -= Locator_PositionChanged;
             base.OnDisappearing();
         }
@@ -73,6 +74,12 @@ namespace TravelRecordApp
             var center = new Xamarin.Forms.Maps.Position(position.Latitude, position.Longitude);
             var span = new Xamarin.Forms.Maps.MapSpan(center, 1, 1);
             locationsMap.MoveToRegion(span);
+            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+            {
+                conn.CreateTable<Post>();
+                var posts = conn.Table<Post>().ToList();
+                DisplayInMap(posts);
+            }
         }
 
         private async Task GetLocation()
