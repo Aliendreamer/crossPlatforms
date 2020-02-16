@@ -4,16 +4,19 @@ using Android.OS;
 using Android.Runtime;
 
 using Plugin.CurrentActivity;
+using TravelRecordApp.Helpers;
 
 namespace TravelRecordApp.Droid
 {
     [Application]
     public partial class MainApplication : Application, Application.IActivityLifecycleCallbacks
     {
+        
         public MainApplication(IntPtr handle, JniHandleOwnership transer)
           : base(handle, transer)
         {
         }
+
 
         public override void OnCreate()
         {

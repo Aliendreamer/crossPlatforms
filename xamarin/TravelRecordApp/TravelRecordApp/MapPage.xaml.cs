@@ -4,7 +4,9 @@ using Plugin.Geolocator.Abstractions;
 using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using TravelRecordApp.Model;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -30,6 +32,29 @@ namespace TravelRecordApp
             }
                 await GetLocation();
          
+        }
+
+        private void DisplayInMap(List<Post> posts)
+        {
+            foreach (var post in posts)
+            {
+                try
+                {
+                    var position = new Xamarin.Forms.Maps.Position(post.Latitude, post.Longitude);
+                    var pin = new Xamarin.Forms.Maps.Pin
+                    {
+                        Type = Xamarin.Forms.Maps.PinType.SavedPin,
+                        Position = position,
+                        Label = post.VenueName,
+                        Address = post.Address
+                    };
+                    locationsMap.Pins.Add(pin);
+                }catch(Exception ex)
+                {
+
+                }
+
+            }
         }
 
         protected override void OnDisappearing()
