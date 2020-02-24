@@ -18,12 +18,14 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
+    <None Remove="Assets\Images\plane.png" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Assets\Images\plane.png" />
   </ItemGroup>
 
   <ItemGroup>

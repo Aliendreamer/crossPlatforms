@@ -6,10 +6,11 @@
 
     <TabbedPage.ToolbarItems>
         <ToolbarItem Text="Add"
+                     IconImageSource="add.png"
                      Clicked="ToolbarItem_Clicked"/>
     </TabbedPage.ToolbarItems>
 
-    <local:HistoryPage Title="History"/>
+    <local:HistoryPage Title="History" IconImageSource="home.png"/>
     <local:MapPage Title="Map"/>
-    <local:ProfilePage Title="Profile"/>
+    <local:ProfilePage Title="Profile" IconImageSource="user.png"/>
 </TabbedPage>
