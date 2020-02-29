@@ -1,13 +1,8 @@
 ﻿using SQLite;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TravelRecordApp.Model;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using System.Linq;
 
 namespace TravelRecordApp
 {
@@ -26,9 +21,9 @@ namespace TravelRecordApp
             {
                 var postTable = connection.Table<Post>().ToList();
                 postCountLabel.Text = postTable.Count.ToString();
-                var orderedList = postTable.Distinct().OrderBy(x => x.CategoryName);
-                var categoriesCount = postTable.GroupBy(x => x.CategoryName).ToDictionary(x=>x.Key, x=>x.Key.Count()); //new Dictionary<string, int>();
-
+                var orderedList = postTable.Where(x=>x.CategoryName != null).Distinct().OrderBy(x => x.CategoryName).ToList();
+                var categoriesCount = orderedList.GroupBy(x => x.CategoryName).ToDictionary(x=>x.Key, x=>x.ToList().Count());
+                categoriesListView.ItemsSource = categoriesCount;
             }
         }
     }

@@ -19,12 +19,7 @@
             <ListView x:Name="categoriesListView">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <ViewCell>
-                            <TextCell  Text="{Binding : Path=Key}" />
-                            <Detail>
-                                
-                            </Detail>
-                        </ViewCell>
+                        <TextCell Text="{Binding Path=Key}" Detail="{Binding Path=Value}"/>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

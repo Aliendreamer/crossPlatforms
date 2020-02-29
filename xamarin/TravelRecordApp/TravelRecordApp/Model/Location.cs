@@ -4,7 +4,7 @@ namespace TravelRecordApp.Model
 {
     public class Location
     {
-        public string  address { get; set; }
+        public string address { get; set; }
         public string crossStreet { get; set; }
         public double lat { get; set; }
         public double lng { get; set; }
@@ -16,3 +16,4 @@ namespace TravelRecordApp.Model
         public string country { get; set; }
         public IList<string> formattedAddress { get; set; }
     }
+}

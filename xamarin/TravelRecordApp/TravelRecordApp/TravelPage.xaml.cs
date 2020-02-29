@@ -57,7 +57,7 @@ namespace TravelRecordApp
                         DisplayAlert("Failure", "Experience failed to be inserted", "Ok");
                 }
             }
-            catch(Exception e)
+            catch(Exception ex)
             {
 
             }

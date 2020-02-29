@@ -9,7 +9,7 @@ namespace TravelRecordApp.Model
 
         public string VenueName { get; set; }
 
-        public int CategoryId { get; set; }
+        public string CategoryId { get; set; }
 
         public string CategoryName { get; set; }
 
