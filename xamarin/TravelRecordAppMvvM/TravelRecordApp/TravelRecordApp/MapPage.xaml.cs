@@ -1,5 +1,7 @@
 ﻿using Plugin.Geolocator;
 using Plugin.Geolocator.Abstractions;
+using Plugin.Permissions;
+using Plugin.Permissions.Abstractions;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -24,26 +26,44 @@ namespace TravelRecordApp
         {
             base.OnAppearing();
 
-            var locator = CrossGeolocator.Current;
-            locator.PositionChanged += Locator_PositionChanged;
-            await locator.StartListeningAsync(0, 100);
-
-            var position = await locator.GetPositionAsync();
-
-            var center = new Xamarin.Forms.Maps.Position(position.Latitude, position.Longitude);
-            var span = new Xamarin.Forms.Maps.MapSpan(center, 2, 2);
-            locationsMap.MoveToRegion(span);
-
-            /*using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+            try
             {
-                conn.CreateTable<Post>();
-                var posts = conn.Table<Post>().ToList();
+                var status = await CrossPermissions.Current.CheckPermissionStatusAsync(Plugin.Permissions.Abstractions.Permission.Location);
+                if(status != Plugin.Permissions.Abstractions.PermissionStatus.Granted)
+                {
+                    if(await CrossPermissions.Current.ShouldShowRequestPermissionRationaleAsync(Plugin.Permissions.Abstractions.Permission.Location))
+                    {
+                        await DisplayAlert("Need permission", "We will have to access your location for this", "Ok");
+                    }
+                    var results = await CrossPermissions.Current.RequestPermissionsAsync(Permission.Location);
+                    status = results[Permission.Location];
+                }
 
-                DisplayInMap(posts);
-            }*/
+                if(status == PermissionStatus.Granted)
+                {
+                    locationsMap.IsShowingUser = true;
+                    var locator = CrossGeolocator.Current;
+                    locator.PositionChanged += Locator_PositionChanged;
+                    await locator.StartListeningAsync(TimeSpan.FromSeconds(0), 100);
 
-            var posts = await Post.Read();
-            DisplayInMap(posts);
+                    var position = await locator.GetPositionAsync();
+
+                    var center = new Xamarin.Forms.Maps.Position(position.Latitude, position.Longitude);
+                    var span = new Xamarin.Forms.Maps.MapSpan(center, 2, 2);
+                    locationsMap.MoveToRegion(span);
+
+                    var posts = await Post.Read();
+                    DisplayInMap(posts);
+                }
+                else
+                {
+
+                }
+            }
+            catch(Exception ex)
+            {
+                await DisplayAlert("No permission", "You didn't grant permission for us to access your device's lcoation", "Ok");
+            }
         }
 
         protected override async void OnDisappearing()
@@ -58,6 +78,7 @@ namespace TravelRecordApp
 
         private void DisplayInMap(List<Post> posts)
         {
+            List<Xamarin.Forms.Maps.Pin> pins = new List<Xamarin.Forms.Maps.Pin>();
             foreach (var post in posts)
             {
                 try

@@ -1,10 +1,12 @@
-﻿using SQLite;
+﻿using Newtonsoft.Json;
+using SQLite;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.WindowsAzure.MobileServices;
 
 namespace TravelRecordApp.Model
 {
@@ -131,17 +133,79 @@ namespace TravelRecordApp.Model
             }
         }
 
+        private Venue venue;
+        
+        [JsonIgnore]
+        public Venue Venue
+        {
+            get { return venue; }
+            set
+            {
+                venue = value;
+
+                if (venue.categories != null)
+                {
+                    var firstCategory = venue.categories.FirstOrDefault();
+
+                    if (firstCategory != null)
+                    {
+                        CategoryId = firstCategory.id;
+                        CategoryName = firstCategory.name;
+                    }
+                }
+
+                if (venue.location != null)
+                {
+                    Address = venue.location.address;
+                    Distance = venue.location.distance;
+                    Latitude = venue.location.lat;
+                    Longitude = venue.location.lng;
+                }
+                VenueName = venue.name;
+                UserId = App.user.Id;
+
+                OnPropertyChanged("Venue");
+            }
+        }
+
+        private DateTimeOffset createdat;   
+
+        public DateTimeOffset CREATEDAT
+        {
+            get { return createdat; }
+            set
+            {
+                createdat = value;
+                OnPropertyChanged("createdat");
+            }
+        }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public static async void Insert(Post post)
         {
-            await App.MobileService.GetTable<Post>().InsertAsync(post);
+            await App.postsTable.InsertAsync(post);
+            await App.MobileService.SyncContext.PushAsync();
+        }
+
+        public static async Task<bool> Delete(Post post)
+        {
+            try
+            {
+                await App.postsTable.DeleteAsync(post);
+                await App.MobileService.SyncContext.PushAsync();
+                return true;
+            }
+            catch(Exception)
+            {
+                return false;
+            }
         }
 
         public static async Task<List<Post>> Read()
         {
-            var posts = await App.MobileService.GetTable<Post>().Where(p => p.UserId == App.user.Id).ToListAsync();
+            var posts = await App.postsTable.Where(p => p.UserId == App.user.Id).ToListAsync();
 
             return posts;
         }

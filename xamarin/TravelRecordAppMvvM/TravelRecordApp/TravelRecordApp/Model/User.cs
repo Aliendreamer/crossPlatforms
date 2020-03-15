@@ -44,6 +44,17 @@ namespace TravelRecordApp.Model
             }
         }
 
+        private string confirmPassword;
+
+        public string ConfirmPassword
+        {
+            get { return confirmPassword; }
+            set
+            {
+                confirmPassword = value;
+                OnPropertyChanged("ConfirmPassword");
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -64,17 +75,24 @@ namespace TravelRecordApp.Model
             }
             else
             {
-                var user = (await App.MobileService.GetTable<User>().Where(u => u.Email == email).ToListAsync()).FirstOrDefault();
-
-                if (user != null)
+                try
                 {
-                    App.user = user;
-                    if (user.Password == password)
-                        return true;
+                    var user = (await App.MobileService.GetTable<User>().Where(u => u.Email == email).ToListAsync()).FirstOrDefault();
+
+                    if (user != null)
+                    {
+                        App.user = user;
+                        if (user.Password == password)
+                            return true;
+                        else
+                            return false;
+                    }
                     else
+                    {
                         return false;
+                    }
                 }
-                else
+                catch(Exception ex)
                 {
                     return false;
                 }
