@@ -9,7 +9,7 @@ const TextScreen =()=>{
             style={styles.input}
             autoCapitalize='none'
             autoCorrect={false}
-            value={name}
+            value={text}
             onChangeText={(newText)=>setText(newText)}
             />
             <Text>{text}</Text>
