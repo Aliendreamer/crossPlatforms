@@ -1,22 +1,18 @@
 import {useState,useEffect} from 'react';
-import yelpAxios from '../api/yelp';
+import makeRequest from '../api/yelp';
 
 export default ()=>{
    const [yelpResults,setYelpResults]= useState([]);
    const [errorMessage,setErrorMessage]=useState("");
-   const searchApi = async() => {
-            try{
-            const result = await yelpAxios.get('/search',{
-                  params:{
-                     limit:50,
-                     term,
-                     location:'san jose'
-                  }
-               });
-               setYelpResults(result.data.businesses);
-         }catch(err){
-            setErrorMessage("Something went wrong");
-         }
+   const searchApi = async searchTerm => {
+       try{
+           const reqParams={term:searchTerm,limit:50,location:'san jose'}
+           const response =  await makeRequest("/search","GET",reqParams);
+           setErrorMessage("");
+           setYelpResults(response.businesses);             
+      }catch(err){
+         setErrorMessage("Something went wrong");
+      }
    }
 
    useEffect(()=>{

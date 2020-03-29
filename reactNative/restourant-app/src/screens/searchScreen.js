@@ -1,11 +1,11 @@
 import React,{useState} from 'react';
-import {View,Text,StyleSheet} from "react-native";
+import {Text,StyleSheet,ScrollView} from "react-native";
 import SearchBar  from "../components/searchBar";
 import useRequest from "../hooks/useRequest";
-import RestaurantList from "../components/retaurantsList";
+import RestaurantList from "../components/restaurantsList";
 const SearchScreen = ()=>{
-   const [term,setTerm]=useState();
-   const [searchApi,results,errorMessage]= useRequest();
+   const [term,setTerm]=useState("");
+   const [searchApi,results,errorMessage]= useRequest(term);
 
    const filterResultsByPrice =(price)=>{
       return results.filter(r=> Object.is(r.price,price));
@@ -17,15 +17,15 @@ const SearchScreen = ()=>{
          term={term} 
          error={errorMessage}
          onTermChange={setTerm} 
-         onTermSubmit={()=>searchApi(term)}/>
-         <View>
-            {errorMessage && <Text>{errorMessage}</Text>}
+         onTermSubmit={()=>searchApi(term)}
+         />
+         <ScrollView>
+            {errorMessage ? <Text>{errorMessage}</Text>:null }
             <RestaurantList title="cost effective" results={filterResultsByPrice("$")} />
-            <RestaurantList title ="Bit pricier"  results={filterResultsByPrice("$$")}/>
+            <RestaurantList title ="Bit pricier"  results={filterResultsByPrice("$$")} />
             <RestaurantList title="Big spender"  results={filterResultsByPrice("$$$")} />
-            <RestaurantList title="Excessive spender"  results={filterResultsByPrice("$$$$")} />
-            <Text>search screen</Text>
-         </View>
+            <RestaurantList title="Excessive spender"  results={filterResultsByPrice("$$$$")}  />
+         </ScrollView>
          </>
       )
 }
