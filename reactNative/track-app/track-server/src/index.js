@@ -1,13 +1,15 @@
 require("./models/user");
+require("./models/track");
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser= require("body-parser");
-const jwt = require("jsonwebtoken");
+const {auth}= require("./middlewares/requireAuth");
 mongoose.Promise=global.Promise;
 
 
 //custom imports
 const authRouter = require("./routes/authRoutes");
+const trackRouter = require("./routes/trackRoutes");
 const app  = express();
 const mongoConnectionStr ='mongodb+srv://AdminUser:h9Cz5KoaPJ52bi8n@cluster0-y6kqz.mongodb.net/track-app?retryWrites=true&w=majority';
 
@@ -21,11 +23,14 @@ mongoose.connection.on("reconnect",()=>console.log("reconnected to mongo cluster
 mongoose.connection.on("connection",()=>console.log("connected to cluster"));
 
 
-app.get('/',(req,res)=>{
-   res.send("works");
+app.get('/',auth,(req,res)=>{
+
+   res.send(`your email ${req.user.email}`);
 });
 app.use(bodyParser.json());
 app.use(authRouter);
+app.use(trackRouter);
+
 app.listen(3000,()=>{
    console.log("listening on 3000");
 })
