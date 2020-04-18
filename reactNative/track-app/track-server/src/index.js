@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const bodyParser= require("body-parser");
 const {auth}= require("./middlewares/requireAuth");
 mongoose.Promise=global.Promise;
+var cors = require('cors');
 
 
 //custom imports
@@ -22,7 +23,8 @@ mongoose.connection.on("error",()=> console.log("lost connection"));
 mongoose.connection.on("reconnect",()=>console.log("reconnected to mongo cluster"));
 mongoose.connection.on("connection",()=>console.log("connected to cluster"));
 
-
+app.options('*', cors());
+app.use(cors());
 app.get('/',auth,(req,res)=>{
 
    res.send(`your email ${req.user.email}`);
