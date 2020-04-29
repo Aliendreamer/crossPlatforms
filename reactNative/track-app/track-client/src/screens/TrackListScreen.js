@@ -4,7 +4,7 @@ import {StyleSheet,Text,Button} from 'react-native';
 const TrackListScreen =({navigation})=>{
    return <> 
    <Text>TrackListScreen</Text>
-   <Button  onPress={()=>navigation.navigate("TrackDetail")}>go to track detail</Button>
+   <Button title="go to track detail" onPress={()=>navigation.navigate("TrackDetail")}/>
    </>
 }
 
