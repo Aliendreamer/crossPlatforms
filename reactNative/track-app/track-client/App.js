@@ -31,7 +31,7 @@ const switchNavigator = createSwitchNavigator({
      Signin:SigninScreen
    }),
    mainFlow:createBottomTabNavigator({
-      trackListFlow,  
+      trackListFlow,
     CreateTrack:TrackCreateScreen,
     Account:AccountScreen
    })
@@ -40,7 +40,7 @@ const App = createAppContainer(switchNavigator);
 
 export default  ()=>{
   return (
-    <TrackProvider>>
+    <TrackProvider>
     <LocationProvider>
     <AuthProvider>
       {<App ref={navigator=>{setNavigator(navigator)}}/>}
