@@ -6,7 +6,6 @@ class Provider extends InheritedWidget {
   Provider({Key key, Widget child}) : super(key: key, child: child);
   @override
   bool updateShouldNotify(covariant InheritedWidget oldWidget) {
-    // TODO: implement updateShouldNotify
     return true;
   }
 
